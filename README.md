@@ -7,6 +7,10 @@ The Sonar API Getter is a utility for retrieving and combining paginated results
 
 These APIs both have a limit of 500 results per page. This utility will retrieve all pages of results (up to the API max of 10000 results total) and combine them into a single JSON file that can be uploaded to Pixee for triage and remediation.
 
+## Requirements
+
+This utility requires Python 3.11 or later.
+
 ## Installation
 
 From GitHub repository over SSH (recommended):
