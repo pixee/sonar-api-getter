@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "sonar-api-getter"
+version = "0.1.0"
+description = ""
+authors = ["Daniel D'Avella <dan.davella@pixee.ai>"]
+readme = "README.md"
+packages = [{include = "sonar_api_getter", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+click = "^8.1.7"
+requests = "^2.32.3"
+
+[tool.poetry.scripts]
+sonar-api-getter = "sonar_api_getter.cli:main"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
