@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "sonar_api_getter", from = "src"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 click = "^8.1.7"
 requests = "^2.32.3"
 

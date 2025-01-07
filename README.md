@@ -9,7 +9,7 @@ These APIs both have a limit of 500 results per page. This utility will retrieve
 
 ## Requirements
 
-This utility requires Python 3.11 or later.
+This utility requires Python 3.10 or later.
 
 ## Installation
 
