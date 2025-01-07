@@ -5,7 +5,7 @@ Utility for retrieving and combining paginated results from the Sonar APIs
 
 The Sonar API Getter is a utility for retrieving and combining paginated results from the Sonar APIs. Specifically, it is intended to retrieve Issues and Hotspots.
 
-These APIs both have a page size limit of 500 results per page. This utility will retrieve all pages of results and combine them into a single JSON file that can be uploaded to Pixee for triage and remediation.
+These APIs both have a limit of 500 results per page. This utility will retrieve all pages of results (up to the API max of 10000 results total) and combine them into a single JSON file that can be uploaded to Pixee for triage and remediation.
 
 ## Installation
 
