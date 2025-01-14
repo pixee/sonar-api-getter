@@ -30,19 +30,31 @@ Once installed, run the following command for a full list of options:
 sonar-api-getter --help
 ```
 
-It is necessary to specify either `--issues` or `--hotspots` to retrieve the desired results. The following example retrieves all issues for a project named `my-project`:
+To retrieve both hotspots and issues in a single combined result file, use the following command:
 ```
-sonar-api-getter --issues MyOrg_MyRepo
+sonar-api-getter MyOrg_MyRepo
 ```
 
-To retrieve hotspots, use the following command:
+You'll see output like this:
 ```
-sonar-api-getter --hotspots MyOrg_MyRepo
+Retrieved 2713 issues from 6 pages
+Retrieved 98 hotspots from 1 pages
+Results written to sonar_combined_MyOrg_MyRepo.json
+```
+
+To retrieve only hotspots, use the following command:
+```
+sonar-api-getter --hotspots-only MyOrg_MyRepo
+```
+
+To retrieve only issues, use the following command:
+```
+sonar-api-getter --issues-only MyOrg_MyRepo
 ```
 
 By default files are saved to a file in the current working directory. An additional argument can be provided to specify the output file:
 ```
-sonar-api-getter --issues MyOrg_MyRepo my-project-issues.json
+sonar-api-getter MyOrg_MyRepo my-project-results.json
 ```
 
 ## Project ID
