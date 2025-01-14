@@ -45,9 +45,7 @@ def get_issues(project: str, result_file: Path | None, token: str | None, url: s
     issues = list(chain.from_iterable(page["issues"] for page in pages))
     print(f"Retrieved {len(issues)} issues from {len(pages)} pages")
 
-    output = dict(issues=issues)
-    result_file.write_text(json.dumps(output, indent=2))
-    print(f"Combined results written to {result_file}")
+    return issues
 
 def get_hotspots_page(project: str, token: str | None, url: str, page_size: int, page: int) -> requests.Response:
     url = f"{url}/hotspots/search"
@@ -78,25 +76,37 @@ def get_hotspots(project: str, result_file: Path | None, token: str | None, url:
     hotspots = list(chain.from_iterable(page["hotspots"] for page in pages))
     print(f"Retrieved {len(hotspots)} hotspots from {len(pages)} pages")
 
-    output = dict(hotspots=hotspots)
-    result_file.write_text(json.dumps(output, indent=2))
-    print(f"Combined results written to {result_file}")
+    return hotspots
 
 @click.command()
 @click.argument("project", type=str, required=True)
 @click.argument("result-file", type=Path, required=False, default=None)
-@click.option("--issues", is_flag=True, help="Get Sonar issues")
-@click.option("--hotspots", is_flag=True, help="Get Sonar hotspots")
+@click.option("--issues-only", is_flag=True, help="Get Sonar issues")
+@click.option("--hotspots-only", is_flag=True, help="Get Sonar hotspots")
 @click.option("--url", type=str, default=SONAR_CLOUD_API_URL, help="Sonar URL")
 @click.option("--page-size", type=int, default=500, help="Sonar results page size")
-def main(project: str, result_file: Path, issues: bool, hotspots: bool, url: str, page_size: int):
-    if not issues and not hotspots:
-        raise click.UsageError("You must specify either --issues or --hotspots")
-    if issues and hotspots:
-        raise click.UsageError("You must specify either --issues or --hotspots, not both")
+def main(project: str, result_file: Path, issues_only: bool, hotspots_only: bool, url: str, page_size: int):
+    if issues_only and hotspots_only:
+        raise click.UsageError("Cannot use both --issues-only and --hotspots-only")
 
     token = os.getenv("SONAR_TOKEN")
-    if issues:
-        get_issues(project, result_file, token, url, page_size)
-    elif hotspots:
-        get_hotspots(project, result_file, token, url, page_size)
+
+    result = {}
+
+    if not hotspots_only:
+        result["issues"] = get_issues(project, result_file, token, url, page_size)
+    if not issues_only:
+        result["hotspots"] = get_hotspots(project, result_file, token, url, page_size)
+
+    if result_file:
+        output_file = result_file
+    elif hotspots_only:
+        output_file = Path(f"sonar_hotspots_{project}.json")
+    elif issues_only:
+        output_file = Path(f"sonar_issues_{project}.json")
+    else:
+        output_file = Path(f"sonar_combined_{project}.json")
+
+    # Write results to the file
+    output_file.write_text(json.dumps(result, indent=2))
+    print(f"Results written to {output_file}")
