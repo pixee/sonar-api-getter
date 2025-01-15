@@ -5,6 +5,7 @@ from pathlib import Path
 
 import click
 import requests
+from security import safe_requests
 
 
 SONAR_CLOUD_API_URL = "https://sonarcloud.io/api"
@@ -14,7 +15,7 @@ def get_issues_page(project: str, token: str | None, url: str, page_size: int, p
     url = f"{url}/issues/search"
     headers = {"Authorization": f"Bearer {token}"} if token else {}
     params = {"projects": project, "statuses": "OPEN", "ps": page_size, "p": page}
-    response = requests.get(url, headers=headers, params=params)
+    response = safe_requests.get(url, headers=headers, params=params)
     return response
 
 
@@ -51,7 +52,7 @@ def get_hotspots_page(project: str, token: str | None, url: str, page_size: int,
     url = f"{url}/hotspots/search"
     headers = {"Authorization": f"Bearer {token}"} if token else {}
     params = {"projectKey": project, "ps": page_size, "p": page}
-    response = requests.get(url, headers=headers, params=params)
+    response = safe_requests.get(url, headers=headers, params=params)
     return response
 
 def get_hotspots(project: str, result_file: Path | None, token: str | None, url: str, page_size: int):
